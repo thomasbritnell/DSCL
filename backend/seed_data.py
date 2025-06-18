@@ -4,8 +4,23 @@ from app import create_app
 from models import db, Challenge
 import csv
 import os
+import requests
 
-CSV_PATH = os.path.join(os.path.dirname(__file__), "seed_data_real.csv")
+
+download_url = "https://docs.google.com/spreadsheets/d/1P1Q4_x8UJeU3yEiADp-JCBA6EexZJpPdpSPrEeasVNE/export?format=csv"
+local_csv = os.path.join(os.path.dirname(__file__), "seed_data_real.csv")
+
+# Try to download the CSV; if it fails, use the local file
+try:
+    response = requests.get(download_url, timeout=10)
+    response.raise_for_status()
+    with open(local_csv, "wb") as f:
+        f.write(response.content)
+    CSV_PATH = local_csv
+    print("Downloaded CSV from Google Sheets.")
+except Exception as e:
+    print(f"Could not download CSV, using local file. Reason: {e}")
+    CSV_PATH = local_csv
 
 def load_challenges_from_csv(csv_path):
     challenges = []
