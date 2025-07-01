@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: dscl-backend
+    ports:
+      - "5000:5000"
+    environment:
+      - DATABASE_URL=sqlite:///challenges.db
+      - CORS_ORIGINS=http://localhost:3000
+      - PORT=5000
+      - FLASK_AUTO_CREATE_TABLES=true
+    volumes:
+      - ./backend:/app
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: dscl-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+    restart: unless-stopped

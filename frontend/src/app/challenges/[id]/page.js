@@ -8,7 +8,7 @@ export default async function ChallengeDetailPage({ params }) {
   const { id } = await params;
 
   // Fetch the challenge data from our Flask API
-  const res = await fetch(`http://localhost:5000/api/challenges/${id}`, {
+  const res = await fetch(`http://localhost:5050/api/challenges/${id}`, {
     cache: "no-store",
   });
 

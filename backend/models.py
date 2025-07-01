@@ -14,7 +14,7 @@ class Challenge(db.Model):
     subcategory = db.Column(db.String(100), nullable=False)
 
     # ─── NEW FIELDS ──────────────────────────────────────────────
-    subject = db.Column(db.String(50), nullable=True)       # e.g. "AIDI1011"
+    #subject = db.Column(db.String(50), nullable=True)       # e.g. "AIDI1011"
     technology = db.Column(db.String(200), nullable=True)   # e.g. "Python,R,SQL"
 
     dataset_url = db.Column(db.String(500), nullable=True)
@@ -29,7 +29,6 @@ class Challenge(db.Model):
             "description": self.description,
             "difficulty": self.difficulty,
             "subcategory": self.subcategory,
-            "subject": self.subject,
             "technology": self.technology,
             "dataset_url": self.dataset_url,
             "overview": self.overview,

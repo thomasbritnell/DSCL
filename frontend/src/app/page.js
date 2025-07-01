@@ -43,8 +43,8 @@ export default function HomePage() {
     }
 
     const url = params.toString()
-      ? `http://localhost:5000/api/challenges?${params.toString()}`
-      : `http://localhost:5000/api/challenges`;
+      ? `http://localhost:5050/api/challenges?${params.toString()}`
+      : `http://localhost:5050/api/challenges`;
 
     fetch(url)
       .then((res) => {

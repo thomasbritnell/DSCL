@@ -1,20 +1,24 @@
 # backend/app.py
+
+import os
 from flask import Flask
 from flask_cors import CORS
 from models import db
 import routes.challenges as challenge_routes
 
+
 def create_app():
     app = Flask(__name__)
-    # Use SQLite for simplicity—this file will live next to app.py
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///challenges.db"
+    # Use environment variable for DB URI, fallback to SQLite
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL", "sqlite:///challenges.db")
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
     # Initialize DB
     db.init_app(app)
 
-    # Enable CORS so that Next.js (localhost:3000) can talk to Flask (localhost:5000)
-    CORS(app)
+    # Use env var for CORS origins, fallback to localhost:3000
+    cors_origins = os.environ.get("CORS_ORIGINS", "http://localhost:3000")
+    CORS(app, origins=[cors_origins], supports_credentials=True)
 
     # Register blueprints / route groups
     app.register_blueprint(challenge_routes.bp, url_prefix="/api")
@@ -23,7 +27,9 @@ def create_app():
 
 if __name__ == "__main__":
     app = create_app()
-    # Create tables if they don’t exist
-    with app.app_context():
-        db.create_all()
-    app.run(debug=True, port=5000)
+    # Only auto-create tables if explicitly set (not recommended for prod)
+    if os.environ.get("FLASK_AUTO_CREATE_TABLES", "false").lower() == "true":
+        with app.app_context():
+            db.create_all()
+    port = int(os.environ.get("PORT", 5000))
+    app.run(debug=False, host="0.0.0.0", port=port)
