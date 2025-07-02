@@ -1,31 +1,23 @@
-version: '3.8'
-
 services:
   backend:
-    build:
-      context: ./backend
+    image: dsclregistry.azurecr.io/backend:latest
     container_name: dscl-backend
     ports:
       - "5000:5000"
     environment:
       - DATABASE_URL=sqlite:///challenges.db
-      - CORS_ORIGINS=http://localhost:3000
+      - CORS_ORIGINS=https://dscl.azurewebsites.net
       - PORT=5000
       - FLASK_AUTO_CREATE_TABLES=true
-    volumes:
-      - ./backend:/app
     restart: unless-stopped
 
   frontend:
-    build:
-      context: ./frontend
+    image: dsclregistry.azurecr.io/frontend:latest
     container_name: dscl-frontend
     ports:
-      - "3000:3000"
+      - "80:80"
     environment:
       - NODE_ENV=production
     depends_on:
       - backend
-    volumes:
-      - ./frontend:/app
     restart: unless-stopped

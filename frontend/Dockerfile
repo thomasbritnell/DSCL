@@ -4,11 +4,11 @@ FROM node:20-alpine as builder
 WORKDIR /app
 
 # Install dependencies
-COPY frontend/package.json frontend/package-lock.json ./
+COPY package.json package-lock.json ./
 RUN npm install
 
 # Copy frontend source code
-COPY frontend/ .
+COPY . .
 
 # Build the Next.js app
 RUN npm run build
@@ -24,6 +24,7 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/next.config.mjs ./next.config.mjs
 
-EXPOSE 3000
+ENV PORT=80
+EXPOSE 80
+CMD ["npm", "run", "start", "--", "-p", "80"]
 
-CMD ["npm", "start"]

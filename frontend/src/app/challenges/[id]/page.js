@@ -7,8 +7,8 @@ export default async function ChallengeDetailPage({ params }) {
   // Await params before destructuring
   const { id } = await params;
 
-  // Fetch the challenge data from our Flask API
-  const res = await fetch(`http://localhost:5050/api/challenges/${id}`, {
+  // Fetch the challenge data from our Flask API (use relative path for production)
+  const res = await fetch(`/api/challenges/${id}`, {
     cache: "no-store",
   });
 
