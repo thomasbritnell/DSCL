@@ -5,13 +5,15 @@ import Link from "next/link";
 
 export default async function ChallengeDetailPage({ params }) {
   // Await params before destructuring
-  const { id } = await params;
+  const { id } = params;
 
   // Fetch the challenge data from our Flask API (use relative path for production)
-  const res = await fetch(`/api/challenges/${id}`, {
+  // Use absolute URL for server-side fetch
+  const baseUrl = "http://backend:5000";
+  const res = await fetch(`${baseUrl}/api/challenges/${id}`, {
     cache: "no-store",
   });
-
+  
   if (!res.ok) {
     return (
       <div className="max-w-3xl mx-auto px-4 py-8">

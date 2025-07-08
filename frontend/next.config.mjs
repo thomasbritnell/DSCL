@@ -4,7 +4,7 @@ const nextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: 'http://localhost:5000/api/:path*', // Use localhost for Azure multi-container
+        destination: 'http://backend:5000/api/:path*', // Use localhost for Azure multi-container
       },
     ];
   },
