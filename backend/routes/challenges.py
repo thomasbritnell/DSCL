@@ -24,7 +24,8 @@ def get_challenges():
     if difficulty:
         query = query.filter(Challenge.difficulty == difficulty)
     if subcategory:
-        query = query.filter(Challenge.subcategory == subcategory)
+        query = query.filter(Challenge.subcategory.ilike(f"%{subcategory}%"))
+
    # if subject:
         #query = query.filter(Challenge.subject == subject)
     if tech:

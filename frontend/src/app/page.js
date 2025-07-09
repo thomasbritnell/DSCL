@@ -10,10 +10,11 @@ import ChallengeCard from "../components/ChallengeCard";
 
 const SUBCATEGORIES = [
   { key: "All", label: "All Topics" },
-  { key: "AI-ML", label: "AI & ML" },
-  { key: "Data-Visualization", label: "Data Visualization" },
-  { key: "Data-Analytics", label: "Data Analytics" },
-  { key: "Case-Studies", label: "Case Studies" },
+  { key: "Imputation", label: "Imputation" },
+  { key: "Data Cleaning", label: "Data Cleaning" },
+  { key: "Data Preparation", label: "Data Preparation" },
+  { key: "Outliers", label: "Outliers" },
+  { key: "Statistics", label: "Statistics" },
 ];
 
 export default function HomePage() {

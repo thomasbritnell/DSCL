@@ -5,17 +5,9 @@ import React from "react";
 
 const TECHNOLOGIES = [
   { key: "All", label: "All Technologies" },
-  { key: "Python", label: "Python" },
-  { key: "R", label: "R" },
-  { key: "SQL", label: "SQL" },
-  { key: "TensorFlow", label: "TensorFlow" },
-  { key: "Plotly", label: "Plotly" },
-  { key: "Streamlit", label: "Streamlit" },
-  { key: "Dash", label: "Dash" },
-  { key: "LightGBM", label: "LightGBM" },
-  { key: "XGBoost", label: "XGBoost" },
-  { key: "SHAP", label: "SHAP" },
-  // …add others as needed…
+  { key: "pandas", label: "Pandas" },
+  { key: "sklearn", label: "SciKitLearn" },
+  { key: "matplotlib", label: "Matplotlib" },
 ];
 
 export default function TechnologySelector({ selected, onChange }) {
