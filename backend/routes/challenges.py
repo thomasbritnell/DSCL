@@ -16,7 +16,7 @@ def get_challenges():
     """
     difficulty = request.args.get("difficulty")
     subcategory = request.args.get("subcategory")
-    subject = request.args.get("subject")
+   #subject = request.args.get("subject")
     tech = request.args.get("technology")
 
     query = Challenge.query
@@ -25,8 +25,8 @@ def get_challenges():
         query = query.filter(Challenge.difficulty == difficulty)
     if subcategory:
         query = query.filter(Challenge.subcategory == subcategory)
-    if subject:
-        query = query.filter(Challenge.subject == subject)
+   # if subject:
+        #query = query.filter(Challenge.subject == subject)
     if tech:
         # Here we do a simple “contains” match on the comma-separated string
         query = query.filter(Challenge.technology.ilike(f"%{tech}%"))

@@ -62,6 +62,19 @@ export default async function ChallengeDetailPage({ params }) {
         </div>
       )}
 
+      {/* Challenge Image */}
+      {challenge.image_1 && (
+        <div className="mb-6 flex justify-center">
+          <img
+            src={challenge.image_1}
+            alt={challenge.title + " image 1"}
+            className="w-full max-w-md h-64 object-cover rounded-lg shadow"
+            style={{ backgroundColor: "#f3f4f6" }}
+          />
+        </div>
+      )}
+
+
       {/* Dataset Link */}
       {challenge.dataset_url && (
         <p className="mb-6">
@@ -75,6 +88,27 @@ export default async function ChallengeDetailPage({ params }) {
             {challenge.dataset_url}
           </a>
         </p>
+      )}
+
+      {/* Dataset Description */}
+      {challenge.dataset_description && (
+        <section className="mb-6">
+          <h2 className="text-2xl font-semibold mb-2">Dataset Description</h2>
+          <p className="text-gray-800 whitespace-pre-line">{challenge.dataset_description}</p>
+        </section>
+      )}
+
+      {/* Challenge Image 2 */}
+      {challenge.image_2 && (
+        
+        <div className="mb-6 flex justify-center">
+          <img
+        src={challenge.image_2}
+        alt={challenge.title + " image 2"}
+        className="w-full max-w-md h-64 object-cover rounded-lg shadow"
+        style={{ backgroundColor: "#f3f4f6" }}
+          />
+        </div>
       )}
 
       {/* Overview */}
@@ -93,10 +127,10 @@ export default async function ChallengeDetailPage({ params }) {
         </section>
       )}
 
-      {/* Task to Perform */}
+      {/* Steps */}
       {challenge.task && (
         <section className="mb-6">
-          <h2 className="text-2xl font-semibold mb-2">Task to Perform</h2>
+          <h2 className="text-2xl font-semibold mb-2">Steps</h2>
           <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto whitespace-pre-wrap">
             {challenge.task}
           </pre>
@@ -113,17 +147,25 @@ export default async function ChallengeDetailPage({ params }) {
         </section>
       )}
 
-      {/* Additional Notes */}
-      <section className="mb-6">
-        <h2 className="text-2xl font-semibold mb-2">Additional Notes</h2>
-        <p className="text-gray-800">
-          • Make sure your final submission includes a well‐commented Jupyter Notebook or Python script.  
-          <br />
-          • Include any charts as embedded PNG or interactive HTML (if using Plotly).  
-          <br />
-          • Write a short README explaining how to run your code and interpret your results.
-        </p>
-      </section>
+      {/* Sample Solution Link */}
+      {challenge.sample_sol && (
+        <section className="mb-8">
+          <p>
+            <strong>
+              Only click this once you are done and wanting to check your answers:
+            </strong>{" "}
+            <a
+              href={challenge.sample_sol}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:underline break-all"
+            >
+              {challenge.sample_sol}
+            </a>
+          </p>
+        </section>
+      )}
+
     </div>
   );
 }

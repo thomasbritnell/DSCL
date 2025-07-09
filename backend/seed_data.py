@@ -33,12 +33,15 @@ def load_challenges_from_csv(csv_path):
                 "description": row.get("description", "").strip(),
                 "difficulty": row.get("difficulty", "").strip(),
                 "subcategory": row.get("subcategory", "").strip(),
-                "subject": None,  # Not present in CSV
                 "technology": row.get("technology", "").strip(),
                 "dataset_url": row.get("dataset_url", "").strip(),
+                "dataset_description": row.get("dataset_description", "").strip(),
                 "overview": row.get("overview", "").strip(),
                 "task": row.get("task", "").strip(),
                 "outcomes": row.get("outcomes", "").strip(),
+                "image_1": row.get("image_1", "").strip(),
+                "image_2": row.get("image_2", "").strip(),
+                "sample_sol": row.get("sample_sol","").strip()
             })
     return challenges
 
@@ -55,12 +58,15 @@ if __name__ == "__main__":
                 description=entry.get("description"),
                 difficulty=entry.get("difficulty"),
                 subcategory=entry.get("subcategory"),
-                subject=entry.get("subject"),
                 technology=entry.get("technology"),
                 dataset_url=entry.get("dataset_url"),
+                dataset_description=entry.get("dataset_description"),
                 overview=entry.get("overview"),
                 task=entry.get("task"),
                 outcomes=entry.get("outcomes"),
+                image_1=entry.get("image_1"),
+                image_2=entry.get("image_2"),
+                sample_sol=entry.get("sample_sol")
             )
             db.session.add(c)
 

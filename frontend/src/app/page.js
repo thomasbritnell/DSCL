@@ -9,7 +9,7 @@ import TechnologySelector from "../components/TechnologySelector";
 import ChallengeCard from "../components/ChallengeCard";
 
 const SUBCATEGORIES = [
-  { key: "All", label: "All Subjects" },
+  { key: "All", label: "All Topics" },
   { key: "AI-ML", label: "AI & ML" },
   { key: "Data-Visualization", label: "Data Visualization" },
   { key: "Data-Analytics", label: "Data Analytics" },
