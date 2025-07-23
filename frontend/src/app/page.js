@@ -15,6 +15,14 @@ const SUBCATEGORIES = [
   { key: "Data Preparation", label: "Data Preparation" },
   { key: "Outliers", label: "Outliers" },
   { key: "Statistics", label: "Statistics" },
+  { key: "Time Series", label: "Time Series" },
+  { key: "Feature Importance", label: "Feature Importance" },
+  { key: "Classification", label: "Classification" },
+  { key: "Metrics", label: "Metrics" },
+  { key: "NLP", label: "NLP" },
+  { key: "Sentiment Analysis", label: "Sentiment Analysis" },
+  { key: "Clustering", label: "Clustering" },
+  { key: "Neural Nets", label: "Neural Nets" },
 ];
 
 export default function HomePage() {
@@ -72,8 +80,8 @@ export default function HomePage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-center mb-6">
+    <div className="max-w-6xl mx-auto px-4 py-8 bg-white">
+      <h1 className="text-3xl font-bold text-center mb-6 text-black">
         Data Science Challenge Library
       </h1>
 
@@ -103,21 +111,21 @@ export default function HomePage() {
         {/* Clear Filters Button */}
         <button
           onClick={clearFilters}
-          className="mt-2 inline-block text-sm text-blue-600 hover:underline"
+          className="mt-2 inline-block text-sm text-blue-700 hover:underline"
         >
           Clear All Filters
         </button>
       </div>
 
       {/* ── Display Loading, Error, or “No Results” ─────────────────────── */}
-      {loading && <p className="text-center mt-8">Loading challenges…</p>}
+      {loading && <p className="text-center mt-8 text-black">Loading challenges…</p>}
       {error && (
-        <p className="text-center mt-8 text-red-600">
+        <p className="text-center mt-8 text-red-700">
           Error: {error}
         </p>
       )}
       {!loading && !error && challenges.length === 0 && (
-        <p className="text-center mt-8 text-gray-700">
+        <p className="text-center mt-8 text-black">
           No challenges match those filters.
         </p>
       )}

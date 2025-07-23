@@ -1,0 +1,27 @@
+#!/bin/bash
+
+set -e
+
+az acr login --name dsclregistry
+
+
+
+
+# Build the Docker image for amd64 platform
+docker build --platform linux/amd64 -t dsclregistry.azurecr.io/backend:latest ./backend
+
+
+# Build the Docker image for amd64 platform
+docker build --platform linux/amd64 -t dsclregistry.azurecr.io/frontend:latest ./frontend
+
+
+
+# Push the Docker image to the registry
+docker push dsclregistry.azurecr.io/backend:latest
+
+# Push the Docker image to the registry
+docker push dsclregistry.azurecr.io/frontend:latest
+
+
+
+docker compose up --build

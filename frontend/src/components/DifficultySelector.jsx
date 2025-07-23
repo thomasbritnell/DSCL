@@ -14,8 +14,8 @@ export default function DifficultySelector({ selected, onChange }) {
           onClick={() => onChange(diff)}
           className={`px-4 py-2 rounded-md font-medium transition ${
             selected === diff
-              ? "bg-blue-600 text-white shadow-md"
-              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+              ? "bg-blue-600 text-black shadow-md"
+              : "bg-gray-200 text-black hover:bg-gray-300"
           }`}
         >
           {diff}
