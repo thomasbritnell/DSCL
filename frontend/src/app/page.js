@@ -90,6 +90,21 @@ export default function HomePage() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8 bg-white">
+      {/* Navigation Bar */}
+      <nav className="mb-8 flex items-center">
+        <div className="flex space-x-4">
+          <Link href="/" className="text-blue-700 font-semibold hover:underline">
+            All Challenges
+          </Link>
+          <Link
+            href="/learning-pathways"
+            className="text-blue-700 font-semibold hover:underline"
+          >
+            Learning Pathways
+          </Link>
+        </div>
+      </nav>
+
       <h1 className="text-3xl font-bold text-center mb-6 text-black">
         Data Science Challenge Library
       </h1>
@@ -127,11 +142,11 @@ export default function HomePage() {
       </div>
 
       {/* ── Display Loading, Error, or “No Results” ─────────────────────── */}
-      {loading && <p className="text-center mt-8 text-black">Loading challenges…</p>}
+      {loading && (
+        <p className="text-center mt-8 text-black">Loading challenges…</p>
+      )}
       {error && (
-        <p className="text-center mt-8 text-red-700">
-          Error: {error}
-        </p>
+        <p className="text-center mt-8 text-red-700">Error: {error}</p>
       )}
       {!loading && !error && challenges.length === 0 && (
         <p className="text-center mt-8 text-black">
@@ -143,7 +158,12 @@ export default function HomePage() {
       {!loading && challenges.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-8">
           {challenges.map((ch) => (
-            <Link key={ch.id} href={`/challenges/${ch.id}`} className="block" passHref>
+            <Link
+              key={ch.id}
+              href={`/challenges/${ch.id}`}
+              className="block"
+              passHref
+            >
               <ChallengeCard challenge={ch} />
             </Link>
           ))}

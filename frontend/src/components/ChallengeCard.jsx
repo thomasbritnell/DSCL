@@ -3,7 +3,6 @@
 
 import React from "react";
 import Link from "next/link";
-import { useLogin } from "./LoginContext";
 
 /**
  * ChallengeCard component displays a summary card for a challenge.
@@ -35,9 +34,7 @@ export default function ChallengeCard({ challenge }) {
   const subClass =
     subcatStyles[challenge.subcategory] || "bg-gray-100 text-black";
 
-  // Get user and completion state from context
-  const { user, completed, toggleCompleted } = useLogin();
-
+  
   return (
     <>
       {/* Challenge card container */}
@@ -60,18 +57,6 @@ export default function ChallengeCard({ challenge }) {
             {challenge.subcategory.replace("-", " ")}
           </span>
         </div>
-        {/* Completion checkbox for logged-in users */}
-        {user && (
-          <label className="flex items-center mb-2 select-none">
-            <input
-              type="checkbox"
-              checked={!!completed[challenge.id]}
-              onChange={() => toggleCompleted(challenge.id)}
-              className="mr-2"
-            />
-            <span className="text-sm text-black">Completed</span>
-          </label>
-        )}
         {/* Link to challenge details */}
         <div className="mt-3 text-black text-sm font-medium">
           View Details ↗
