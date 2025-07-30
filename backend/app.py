@@ -8,6 +8,10 @@ import routes.challenges as challenge_routes
 
 
 def create_app():
+    """
+    Factory function to create and configure the Flask app.
+    Sets up database, CORS, and registers blueprints.
+    """
     app = Flask(__name__)
     # Use environment variable for DB URI, fallback to SQLite
     app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL", "sqlite:///challenges.db")
@@ -32,4 +36,5 @@ if __name__ == "__main__":
         with app.app_context():
             db.create_all()
     port = int(os.environ.get("PORT", 5000))
+    # Run the Flask app
     app.run(debug=False, host="0.0.0.0", port=port)

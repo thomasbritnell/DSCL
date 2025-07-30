@@ -6,6 +6,8 @@ import csv
 import os
 import requests
 
+# URL to download seed data CSV from Google Sheets
+# If download fails, fallback to local file
 
 download_url = "https://docs.google.com/spreadsheets/d/1P1Q4_x8UJeU3yEiADp-JCBA6EexZJpPdpSPrEeasVNE/export?format=csv"
 local_csv = os.path.join(os.path.dirname(__file__), "seed_data_real.csv")
@@ -23,6 +25,10 @@ except Exception as e:
     CSV_PATH = local_csv
 
 def load_challenges_from_csv(csv_path):
+    """
+    Load challenges from a CSV file and return a list of dicts.
+    Each dict maps CSV columns to Challenge fields.
+    """
     challenges = []
     with open(csv_path, newline='', encoding='utf-8') as csvfile:
         reader = csv.DictReader(csvfile)
@@ -53,6 +59,7 @@ if __name__ == "__main__":
 
         challenges = load_challenges_from_csv(CSV_PATH)
         for entry in challenges:
+            # Create and add Challenge objects to the DB
             c = Challenge(
                 title=entry["title"],
                 description=entry.get("description"),

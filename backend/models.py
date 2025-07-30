@@ -5,6 +5,10 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 class Challenge(db.Model):
+    """
+    SQLAlchemy model for a Challenge.
+    Represents a challenge with metadata, dataset info, and solution.
+    """
     __tablename__ = "challenges"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -12,10 +16,7 @@ class Challenge(db.Model):
     description = db.Column(db.Text, nullable=True)
     difficulty = db.Column(db.String(50), nullable=False)
     subcategory = db.Column(db.String(100), nullable=False)
-
-    
     technology = db.Column(db.String(200), nullable=True)  
-
     dataset_url = db.Column(db.String(500), nullable=True)
     dataset_description = db.Column(db.String(500), nullable=True)
     overview = db.Column(db.Text, nullable=True)
@@ -23,10 +24,12 @@ class Challenge(db.Model):
     outcomes = db.Column(db.Text, nullable=True)
     image_1 = db.Column(db.Text, nullable=True)
     image_2 = db.Column(db.Text, nullable=True)
-
     sample_sol = db.Column(db.Text, nullable=True)
 
     def to_dict(self):
+        """
+        Serialize the Challenge object to a dictionary for API responses.
+        """
         return {
             "id": self.id,
             "title": self.title,
