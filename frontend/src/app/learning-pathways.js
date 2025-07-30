@@ -26,16 +26,18 @@ export default function LearningPathwaysPage() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-10">
-      <h1 className="text-3xl font-bold text-center mb-10 text-black">Learning Pathways</h1>
+    <div className="max-w-6xl mx-auto px-4 py-8 bg-white text-black">
+      <h1 className="text-3xl font-bold text-center mb-10">Learning Pathways</h1>
       <Link href="/" className="text-blue-700 font-medium hover:underline mb-8 inline-block">← Back to All Challenges</Link>
       {LEARNING_PATHWAYS.map((pathway) => (
         <section key={pathway.name} className="mb-12">
-          <h2 className="text-2xl font-semibold mb-6 text-black">{pathway.name}</h2>
+          <h2 className="text-2xl font-semibold mb-6">{pathway.name}</h2>
           <div className="flex flex-row items-center space-x-6 overflow-x-auto pb-4">
             {getChallengesByIds(pathway.challengeIds).map((challenge, idx, arr) => (
               <React.Fragment key={challenge.id}>
-                <ChallengeCard challenge={challenge} />
+                <Link href={`/challenges/${challenge.id}`} className="block">
+                  <ChallengeCard challenge={challenge} />
+                </Link>
                 {idx < arr.length - 1 && (
                   <span className="text-2xl text-gray-400">→</span>
                 )}
