@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import ChallengeCard from "../components/ChallengeCard";
-// Pathways are now fetched from backend API
+
 
 /**
  * LearningPathwaysPage displays groups of challenge cards for each pathway.
