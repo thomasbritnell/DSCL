@@ -36,9 +36,6 @@ see requirements.txt in the backend and package.json in the frontend
 
 Usage:
 
-Docker compose is the easiest way to use the application. 
-You can find the two necesary docker images at dsclregistry.azurecr.io/backend:latest and dsclregistry.azurecr.io/frontend:latest. 
-
 To run the app manually, perform the following steps:
 1. **Backend Setup**
    - Navigate to the `backend` directory:
