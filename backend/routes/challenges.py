@@ -1,9 +1,20 @@
-# backend/routes/challenges.py
+from models import Pathway
 
 from flask import Blueprint, request, jsonify
 from models import db, Challenge
 
 bp = Blueprint("challenges", __name__)
+
+# Get all pathways
+@bp.route("/pathways", methods=["GET"])
+def get_pathways():
+    """
+    Returns all learning pathways as a list of {id, name, challengeIds}.
+    """
+    pathways = Pathway.query.all()
+    return jsonify([p.to_dict() for p in pathways])
+# backend/routes/challenges.py
+
 
 @bp.route("/challenges", methods=["GET"])
 def get_challenges():

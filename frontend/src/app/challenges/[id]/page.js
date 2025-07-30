@@ -13,13 +13,14 @@ import Link from "next/link";
 export default async function ChallengeDetailPage({ params }) {
   // Get challenge id from route params
   const { id } = params;
+  const challengeId = parseInt(id);
 
   // Fetch challenge data from Flask API
   const baseUrl = "http://backend:5000";
   const res = await fetch(`${baseUrl}/api/challenges/${id}`, {
     cache: "no-store",
   });
-  
+
   // If challenge not found, show error message
   if (!res.ok) {
     return (
@@ -39,14 +40,59 @@ export default async function ChallengeDetailPage({ params }) {
 
   // Parse challenge data from response
   const challenge = await res.json();
-  // challenge = { id, title, description, difficulty, subcategory, technology, dataset_url, overview, task, outcomes }
 
+  // Fetch all pathways from backend
+  const pathwaysRes = await fetch(`${baseUrl}/api/pathways`, { cache: "no-store" });
+  let pathway = null;
+  let pathwayChallenges = [];
+  if (pathwaysRes.ok) {
+    const pathways = await pathwaysRes.json();
+    pathway = pathways.find(p => p.challengeIds.includes(challengeId));
+    if (pathway) {
+      // Fetch all challenges in the pathway for their titles
+      const idsParam = pathway.challengeIds.join(",");
+      const challengesRes = await fetch(`${baseUrl}/api/challenges?ids=${idsParam}`, { cache: "no-store" });
+      if (challengesRes.ok) {
+        pathwayChallenges = await challengesRes.json();
+      }
+    }
+  }
+
+  return <ChallengeDetail challenge={challenge} pathway={pathway} pathwayChallenges={pathwayChallenges} />;
+}
+
+function abbreviateTitle(title) {
+  // Abbreviate to first 18 chars, add ellipsis if longer
+  return title.length > 18 ? title.slice(0, 15) + "…" : title;
+}
+
+function ChallengeDetail({ challenge, pathway, pathwayChallenges }) {
   return (
     <div className="max-w-3xl mx-auto px-4 py-10 bg-white">
       {/* Back to all challenges */}
       <Link href="/" className="text-blue-700 font-medium hover:underline mb-6 inline-block">
         ← Back to all challenges
       </Link>
+
+      {/* Pathway Navigation (if applicable) */}
+      {pathway && (
+        <div className="mb-8">
+          <h2 className="text-xl font-semibold mb-2 text-black">Pathway: {pathway.name}</h2>
+          <div className="flex flex-row items-center space-x-4 overflow-x-auto pb-2">
+            {pathway.challengeIds.map(cid => {
+              const ch = pathwayChallenges.find(c => c.id === cid);
+              const label = ch ? abbreviateTitle(ch.title) : `Challenge ${cid}`;
+              return cid === challenge.id ? (
+                <span key={cid} className="font-bold text-blue-700 text-lg underline">{label}</span>
+              ) : (
+                <Link key={cid} href={`/challenges/${cid}`} className="text-blue-700 font-medium hover:underline">
+                  {label}
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Title */}
       <h1 className="text-3xl font-bold mb-2 text-black">{challenge.title}</h1>
@@ -81,7 +127,6 @@ export default async function ChallengeDetailPage({ params }) {
           />
         </div>
       )}
-
 
       {/* Dataset Link */}
       {challenge.dataset_url && (

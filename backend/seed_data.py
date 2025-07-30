@@ -1,7 +1,7 @@
 # backend/seed_data.py
 
 from app import create_app
-from models import db, Challenge
+from models import db, Challenge, Pathway
 import csv
 import os
 import requests
@@ -78,5 +78,18 @@ if __name__ == "__main__":
             db.session.add(c)
 
         db.session.commit()
-        print("Dropped old tables, recreated schema, and seeded from seed_data_real.csv!")
+
+        # ── Seed Pathways Table ──────────────────────────────
+        pathways = [
+            {"name": "Learn the basics of data manipulation", "challenge_ids": "1,2,3,5,6"},
+            {"name": "Learn machine learning basics", "challenge_ids": "7,8,9,10,11"},
+            {"name": "Learn to detect outliers", "challenge_ids": "2,4,13"},
+            {"name": "Build a recommender system with ML", "challenge_ids": "12,15"},
+            {"name": "Work with images", "challenge_ids": "16,17,18"},
+        ]
+        for entry in pathways:
+            p = Pathway(name=entry["name"], challenge_ids=entry["challenge_ids"])
+            db.session.add(p)
+        db.session.commit()
+        print("Dropped old tables, recreated schema, and seeded from seed_data_real.csv and hardcoded pathways!")
         print("Database created/updated and seeded successfully!")

@@ -1,8 +1,30 @@
-# backend/models.py
-
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
+
+
+class Pathway(db.Model):
+    """
+    SQLAlchemy model for a Learning Pathway.
+    Each pathway has a name and a list of challenge IDs (stored as a comma-separated string).
+    """
+    __tablename__ = "pathways"
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(200), nullable=False)
+    challenge_ids = db.Column(db.String(500), nullable=False)  # Comma-separated list of challenge IDs
+
+    def to_dict(self):
+        """
+        Serialize the Pathway object to a dictionary for API responses.
+        """
+        return {
+            "id": self.id,
+            "name": self.name,
+            "challengeIds": [int(cid) for cid in self.challenge_ids.split(",") if cid.strip()]
+        }
+# backend/models.py
+
 
 class Challenge(db.Model):
     """

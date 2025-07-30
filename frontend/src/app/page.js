@@ -2,6 +2,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import DifficultySelector from "../components/DifficultySelector";
 import SubcategoryTabs from "../components/SubcategoryTabs";
@@ -32,6 +33,7 @@ const SUBCATEGORIES = [
  * @returns {JSX.Element}
  */
 export default function HomePage() {
+  const pathname = usePathname();
   // State for filters
   const [difficulty, setDifficulty] = useState("All");
   const [subcategory, setSubcategory] = useState("All");
@@ -93,12 +95,21 @@ export default function HomePage() {
       {/* Navigation Bar */}
       <nav className="mb-8 flex items-center">
         <div className="flex space-x-4">
-          <Link href="/" className="text-blue-700 font-semibold hover:underline">
+          <Link
+            href="/"
+            className={
+              `text-blue-700 font-semibold hover:underline px-4 py-2 rounded ${pathname === "/" ? "border-2 border-blue-700 bg-blue-50" : ""}`
+            }
+            style={pathname === "/" ? { boxShadow: "0 0 0 2px #3b82f6" } : {}}
+          >
             All Challenges
           </Link>
           <Link
             href="/learning-pathways"
-            className="text-blue-700 font-semibold hover:underline"
+            className={
+              `text-blue-700 font-semibold hover:underline px-4 py-2 rounded ${pathname === "/learning-pathways" ? "border-2 border-blue-700 bg-blue-50" : ""}`
+            }
+            style={pathname === "/learning-pathways" ? { boxShadow: "0 0 0 2px #3b82f6" } : {}}
           >
             Learning Pathways
           </Link>
