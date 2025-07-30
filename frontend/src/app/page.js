@@ -8,6 +8,7 @@ import SubcategoryTabs from "../components/SubcategoryTabs";
 import TechnologySelector from "../components/TechnologySelector";
 import ChallengeCard from "../components/ChallengeCard";
 
+// List of subcategories for filtering challenges
 const SUBCATEGORIES = [
   { key: "All", label: "All Topics" },
   { key: "Imputation", label: "Imputation" },
@@ -25,21 +26,28 @@ const SUBCATEGORIES = [
   { key: "Neural Nets", label: "Neural Nets" },
 ];
 
+/**
+ * HomePage component displays the main challenge library UI.
+ * Includes filters, challenge cards, and error/loading states.
+ * @returns {JSX.Element}
+ */
 export default function HomePage() {
-  // ─── Two filter states (remove 'subject') ───────────────────────────
+  // State for filters
   const [difficulty, setDifficulty] = useState("All");
   const [subcategory, setSubcategory] = useState("All");
   const [technology, setTechnology] = useState("All");
 
+  // State for challenge data and UI status
   const [challenges, setChallenges] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // ─── Fetch whenever any filter changes ───────────────────────────────
+  // Fetch challenges whenever filters change
   useEffect(() => {
     setLoading(true);
     setError(null);
 
+    // Build query params for API
     const params = new URLSearchParams();
     if (difficulty !== "All") {
       params.append("difficulty", difficulty);
@@ -55,6 +63,7 @@ export default function HomePage() {
       ? `/api/challenges?${params.toString()}`
       : `/api/challenges`;
 
+    // Fetch challenge data from backend
     fetch(url)
       .then((res) => {
         if (!res.ok) throw new Error("Failed to load challenges.");
@@ -72,7 +81,7 @@ export default function HomePage() {
       });
   }, [difficulty, subcategory, technology]);
 
-  // ─── Clear All Filters ───────────────────────────────────────────────
+  // Reset all filters to default
   function clearFilters() {
     setDifficulty("All");
     setSubcategory("All");

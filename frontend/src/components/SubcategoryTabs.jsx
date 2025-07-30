@@ -1,8 +1,16 @@
 // frontend/src/components/SubcategoryTabs.jsx
-"use client";
 
 import React, { useState } from "react";
 
+/**
+ * SubcategoryTabs displays a capped set of subcategory filter buttons with navigation.
+ * Shows up to MAX_VISIBLE tabs at a time, with next/prev navigation for overflow.
+ * @param {Object} props
+ * @param {Array} props.subcats - Array of subcategory objects
+ * @param {string} props.selected - Currently selected subcategory key
+ * @param {Function} props.onChange - Callback for tab change
+ * @returns {JSX.Element}
+ */
 const MAX_VISIBLE = 7;
 
 export default function SubcategoryTabs({ subcats, selected, onChange }) {
@@ -20,6 +28,7 @@ export default function SubcategoryTabs({ subcats, selected, onChange }) {
 
   return (
     <div className="flex items-center justify-center mt-6 border-b border-gray-300 pb-2">
+      {/* Previous button for overflow navigation */}
       {canPrev && (
         <button
           onClick={handlePrev}
@@ -28,6 +37,7 @@ export default function SubcategoryTabs({ subcats, selected, onChange }) {
           ◀
         </button>
       )}
+      {/* Visible subcategory tabs */}
       <div className="flex space-x-4 overflow-x-auto scrollbar-hide">
         {subcats.slice(startIdx, endIdx).map((sc) => (
           <button
@@ -43,6 +53,7 @@ export default function SubcategoryTabs({ subcats, selected, onChange }) {
           </button>
         ))}
       </div>
+      {/* Next button for overflow navigation */}
       {canNext && (
         <button
           onClick={handleNext}

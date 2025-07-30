@@ -1,8 +1,14 @@
 // frontend/src/components/DifficultySelector.jsx
-"use client";
 
 import React from "react";
 
+/**
+ * DifficultySelector displays filter buttons for challenge difficulty.
+ * @param {Object} props
+ * @param {string} props.selected - Currently selected difficulty
+ * @param {Function} props.onChange - Callback for difficulty change
+ * @returns {JSX.Element}
+ */
 const difficulties = ["All", "Easy", "Medium", "Hard"];
 
 export default function DifficultySelector({ selected, onChange }) {

@@ -3,17 +3,24 @@
 import React from "react";
 import Link from "next/link";
 
+/**
+ * ChallengeDetailPage fetches and displays details for a single challenge.
+ * Shows badges, images, dataset info, and solution link.
+ * @param {Object} props
+ * @param {Object} props.params - Route params (contains challenge id)
+ * @returns {JSX.Element}
+ */
 export default async function ChallengeDetailPage({ params }) {
-  // Await params before destructuring
+  // Get challenge id from route params
   const { id } = params;
 
-  // Fetch the challenge data from our Flask API (use relative path for production)
-  // Use absolute URL for server-side fetch
+  // Fetch challenge data from Flask API
   const baseUrl = "http://backend:5000";
   const res = await fetch(`${baseUrl}/api/challenges/${id}`, {
     cache: "no-store",
   });
   
+  // If challenge not found, show error message
   if (!res.ok) {
     return (
       <div className="max-w-3xl mx-auto px-4 py-8 bg-white">
@@ -30,6 +37,7 @@ export default async function ChallengeDetailPage({ params }) {
     );
   }
 
+  // Parse challenge data from response
   const challenge = await res.json();
   // challenge = { id, title, description, difficulty, subcategory, technology, dataset_url, overview, task, outcomes }
 

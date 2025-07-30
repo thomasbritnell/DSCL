@@ -1,8 +1,14 @@
 // frontend/src/components/TechnologySelector.jsx
-"use client";
 
 import React from "react";
 
+/**
+ * TechnologySelector displays a dropdown for filtering by technology.
+ * @param {Object} props
+ * @param {string} props.selected - Currently selected technology
+ * @param {Function} props.onChange - Callback for technology change
+ * @returns {JSX.Element}
+ */
 const TECHNOLOGIES = [
   { key: "All", label: "All Technologies" },
   { key: "pandas", label: "Pandas" },
