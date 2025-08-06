@@ -2,6 +2,7 @@
 
 import "../app/globals.css"; // Imports Tailwind and global CSS
 import React from "react";
+import { LoginProvider } from "../components/LoginContext";
 
 /**
  * Metadata for the app (used by Next.js)
@@ -24,7 +25,9 @@ export default function RootLayout({ children }) {
         {/* Additional <link> or <meta> tags can be added here */}
       </head>
       <body className="bg-gray-50 text-gray-900">
-        {children}
+        <LoginProvider>
+          {children}
+        </LoginProvider>
       </body>
     </html>
   );

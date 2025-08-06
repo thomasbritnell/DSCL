@@ -16,8 +16,20 @@ def register():
 
     user = User(username=data["username"])
     user.set_password(data["password"])
-    db.session.add(user)
-    db.session.commit()
+    try:
+        db.session.add(user)
+        db.session.commit()
+        print(f"User {data['username']} registered successfully")
+        # Verify the user was created
+        verify_user = User.query.filter_by(username=data["username"]).first()
+        if verify_user:
+            print(f"User {data['username']} verified in database")
+        else:
+            print(f"Warning: User {data['username']} not found after commit")
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error registering user: {str(e)}")
+        return {"error": "Registration failed"}, 500
     return {"message": "User registered successfully"}
 
 @bp.route("/login", methods=["POST"])

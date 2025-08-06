@@ -16,7 +16,7 @@ def create_app():
     """
     app = Flask(__name__)
     # Use environment variable for DB URI, fallback to SQLite
-    app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL", "sqlite:///challenges.db")
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL", "sqlite:///instance/challenges.db")
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config['SECRET_KEY'] = '5553698f87140fcbc77a8192e1acce32'
 
@@ -43,10 +43,10 @@ def create_app():
 
 if __name__ == "__main__":
     app = create_app()
-    # Only auto-create tables if explicitly set (not recommended for prod)
-    if os.environ.get("FLASK_AUTO_CREATE_TABLES", "false").lower() == "true":
-        with app.app_context():
-            db.create_all()
+    # Always create tables if they don't exist - ensures users table is created
+    with app.app_context():
+        db.create_all()
+        
     port = int(os.environ.get("PORT", 5000))
     # Run the Flask app
     app.run(debug=False, host="0.0.0.0", port=port)

@@ -8,6 +8,8 @@ import DifficultySelector from "../components/DifficultySelector";
 import SubcategoryTabs from "../components/SubcategoryTabs";
 import TechnologySelector from "../components/TechnologySelector";
 import ChallengeCard from "../components/ChallengeCard";
+import { useLogin } from "../components/LoginContext";
+import LoginForm from "../components/LoginForm";
 
 // List of subcategories for filtering challenges
 const SUBCATEGORIES = [
@@ -33,6 +35,37 @@ const SUBCATEGORIES = [
  * @returns {JSX.Element}
  */
 export default function HomePage() {
+  const { user, loading, login, logout } = useLogin();
+  const [showLogin, setShowLogin] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
+  const [registerError, setRegisterError] = useState(null);
+  const [registerLoading, setRegisterLoading] = useState(false);
+
+  // Registration handler
+  async function handleRegister(e) {
+    e.preventDefault();
+    setRegisterError(null);
+    setRegisterLoading(true);
+    const form = e.target;
+    const username = form.username.value;
+    const password = form.password.value;
+    try {
+      const res = await fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+      if (res.ok) {
+        setShowRegister(false);
+        setShowLogin(true);
+      } else {
+        const data = await res.json();
+        setRegisterError(data.error || "Registration failed.");
+      }
+    } finally {
+      setRegisterLoading(false);
+    }
+  }
   const pathname = usePathname();
   // State for filters
   const [difficulty, setDifficulty] = useState("All");
@@ -41,12 +74,12 @@ export default function HomePage() {
 
   // State for challenge data and UI status
   const [challenges, setChallenges] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [challengeLoading, setChallengeLoading] = useState(false);
   const [error, setError] = useState(null);
 
   // Fetch challenges whenever filters change
   useEffect(() => {
-    setLoading(true);
+    setChallengeLoading(true);
     setError(null);
 
     // Build query params for API
@@ -79,7 +112,7 @@ export default function HomePage() {
         setError(err.message || "Unknown error");
       })
       .finally(() => {
-        setLoading(false);
+        setChallengeLoading(false);
       });
   }, [difficulty, subcategory, technology]);
 
@@ -91,8 +124,67 @@ export default function HomePage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8 bg-white">
-      {/* Navigation Bar */}
+    <div className="max-w-6xl mx-auto px-4 py-8 bg-white relative">
+      {/* User status and auth menu */}
+      <div className="absolute right-0 top-0 mt-4 mr-4 z-10">
+      {loading ? null : user ? (
+          <div className="flex items-center space-x-2">
+            <span className="text-sm text-gray-700">Logged in as <span className="font-semibold">{user.username}</span></span>
+            <button onClick={logout} className="text-blue-700 text-sm hover:underline">Logout</button>
+          </div>
+        ) : (
+          <div className="flex items-center space-x-2">
+            <span className="text-sm text-gray-700">Guest</span>
+            <button onClick={() => setShowLogin(true)} className="text-blue-700 text-sm hover:underline">Sign In</button>
+            <button onClick={() => setShowRegister(true)} className="text-blue-700 text-sm hover:underline">Register</button>
+          </div>
+        )}
+      </div>
+
+      {/* Login Modal */}
+      {showLogin && (
+        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded shadow-lg w-full max-w-xs relative">
+            <button onClick={() => setShowLogin(false)} className="absolute top-2 right-2 text-gray-400 hover:text-gray-700">✕</button>
+            <LoginForm onLoginSuccess={() => { 
+              setShowLogin(false); 
+              // Force a re-fetch of the current user
+              fetch("/api/me", { credentials: "include" })
+                .then(res => res.ok ? res.json() : null)
+                .then(data => {
+                  if (data && data.username) {
+                    login(data.username);
+                  }
+                });
+            }} />
+            </div>
+          </div>
+          )}
+
+          {/* Register Modal */}
+          {showRegister && (
+          <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded shadow-lg w-full max-w-xs relative">
+            <button onClick={() => setShowRegister(false)} className="absolute top-2 right-2 text-black hover:text-black">✕</button>
+            <form onSubmit={handleRegister} className="space-y-4">
+              <h2 className="text-lg font-semibold mb-2 text-black">Register</h2>
+              <label className="block text-black">
+              Username:
+              <input name="username" type="text" required className="w-full border rounded px-2 py-1 mt-1 text-black" />
+              </label>
+              <label className="block text-black">
+              Password:
+              <input name="password" type="password" required className="w-full border rounded px-2 py-1 mt-1 text-black" />
+              </label>
+              {registerError && <p className="text-red-600 text-sm text-black">{registerError}</p>}
+              <button type="submit" className="w-full bg-blue-700 text-black py-2 rounded" disabled={registerLoading}>
+              {registerLoading ? "Registering..." : "Register"}
+              </button>
+            </form>
+            </div>
+          </div>
+          )}
+          {/* Navigation Bar */}
       <nav className="mb-8 flex items-center">
         <div className="flex space-x-4">
           <Link
@@ -153,20 +245,20 @@ export default function HomePage() {
       </div>
 
       {/* ── Display Loading, Error, or “No Results” ─────────────────────── */}
-      {loading && (
+      {challengeLoading && (
         <p className="text-center mt-8 text-black">Loading challenges…</p>
       )}
       {error && (
         <p className="text-center mt-8 text-red-700">Error: {error}</p>
       )}
-      {!loading && !error && challenges.length === 0 && (
+      {!challengeLoading && !error && challenges.length === 0 && (
         <p className="text-center mt-8 text-black">
           No challenges match those filters.
         </p>
       )}
 
       {/* ── Grid of ChallengeCard ─────────────────────────────────────── */}
-      {!loading && challenges.length > 0 && (
+      {!challengeLoading && challenges.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-8">
           {challenges.map((ch) => (
             <Link
