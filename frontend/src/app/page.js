@@ -49,11 +49,12 @@ export default function HomePage() {
     const form = e.target;
     const username = form.username.value;
     const password = form.password.value;
+    const user_type = form.user_type.value;
     try {
       const res = await fetch("/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username, password, user_type }),
       });
       if (res.ok) {
         setShowRegister(false);
@@ -130,6 +131,9 @@ export default function HomePage() {
       {loading ? null : user ? (
           <div className="flex items-center space-x-2">
             <span className="text-sm text-gray-700">Logged in as <span className="font-semibold">{user.username}</span></span>
+            {user.userType === "admin" && (
+              <Link href="/admin/challenges" className="text-green-700 text-sm hover:underline">Admin Panel</Link>
+            )}
             <button onClick={logout} className="text-blue-700 text-sm hover:underline">Logout</button>
           </div>
         ) : (
@@ -146,16 +150,10 @@ export default function HomePage() {
         <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded shadow-lg w-full max-w-xs relative">
             <button onClick={() => setShowLogin(false)} className="absolute top-2 right-2 text-gray-400 hover:text-gray-700">✕</button>
-            <LoginForm onLoginSuccess={() => { 
-              setShowLogin(false); 
-              // Force a re-fetch of the current user
-              fetch("/api/me", { credentials: "include" })
-                .then(res => res.ok ? res.json() : null)
-                .then(data => {
-                  if (data && data.username) {
-                    login(data.username);
-                  }
-                });
+            <LoginForm onLoginSuccess={async (username) => { 
+              setShowLogin(false);
+              // Use the enhanced login function which will fetch the correct user data
+              await login(username);
             }} />
             </div>
           </div>
@@ -175,6 +173,13 @@ export default function HomePage() {
               <label className="block text-black">
               Password:
               <input name="password" type="password" required className="w-full border rounded px-2 py-1 mt-1 text-black" />
+              </label>
+              <label className="block text-black">
+              User Type:
+              <select name="user_type" className="w-full border rounded px-2 py-1 mt-1 text-black bg-white">
+                <option value="guest">Guest</option>
+                <option value="admin">Admin</option>
+              </select>
               </label>
               {registerError && <p className="text-red-600 text-sm text-black">{registerError}</p>}
               <button type="submit" className="w-full bg-blue-700 text-black py-2 rounded" disabled={registerLoading}>

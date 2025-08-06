@@ -6,6 +6,8 @@ from flask_cors import CORS
 from models import db, User
 import routes.challenges as challenge_routes
 import routes.auth as auth_routes
+import routes.completion as completion_routes
+import routes.admin as admin_routes
 from flask_login import LoginManager
 
 
@@ -38,6 +40,8 @@ def create_app():
     # Register blueprints / route groups
     app.register_blueprint(challenge_routes.bp, url_prefix="/api")
     app.register_blueprint(auth_routes.bp, url_prefix="/api")
+    app.register_blueprint(completion_routes.bp, url_prefix="/api")
+    app.register_blueprint(admin_routes.bp, url_prefix="/api/admin")
 
     return app
 
@@ -46,6 +50,10 @@ if __name__ == "__main__":
     # Always create tables if they don't exist - ensures users table is created
     with app.app_context():
         db.create_all()
+        
+        # Create the completed_challenges table if it doesn't exist
+        from routes.completion import setup_completed_challenges_table
+        setup_completed_challenges_table()
         
     port = int(os.environ.get("PORT", 5000))
     # Run the Flask app

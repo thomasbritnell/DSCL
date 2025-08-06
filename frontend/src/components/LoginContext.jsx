@@ -12,7 +12,7 @@ export function LoginProvider({ children }) {
     fetch("/api/me", { credentials: "include" })
       .then((res) => (res.ok ? res.json() : { username: null }))
       .then((data) => {
-        setUser(data.username ? { username: data.username } : null);
+        setUser(data.username ? { username: data.username, userType: data.user_type } : null);
         setLoading(false);
       })
       .catch(() => {
@@ -21,7 +21,24 @@ export function LoginProvider({ children }) {
       });
   }, []);
 
-  const login = (username) => setUser({ username });
+  const login = async (username, userType = 'guest') => {
+    // First set user with provided info
+    setUser({ username, userType });
+    
+    // Then fetch the latest user data from the server to ensure we have the correct user_type
+    try {
+      const res = await fetch("/api/me", { credentials: "include" });
+      if (res.ok) {
+        const userData = await res.json();
+        if (userData.username) {
+          setUser({ username: userData.username, userType: userData.user_type });
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching user data after login:", error);
+    }
+  };
+  
   const logout = async () => {
     await fetch("/api/logout", { method: "POST", credentials: "include" });
     setUser(null);

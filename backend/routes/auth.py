@@ -16,6 +16,10 @@ def register():
 
     user = User(username=data["username"])
     user.set_password(data["password"])
+    
+    # Set user_type if provided, otherwise it defaults to "guest"
+    if "user_type" in data and data["user_type"] in ["guest", "admin"]:
+        user.user_type = data["user_type"]
     try:
         db.session.add(user)
         db.session.commit()
@@ -50,5 +54,8 @@ def logout():
 @bp.route("/me", methods=["GET"])
 def me():
     if current_user.is_authenticated:
-        return {"username": current_user.username}
+        return {
+            "username": current_user.username,
+            "user_type": current_user.user_type
+        }
     return {"username": None}, 401
